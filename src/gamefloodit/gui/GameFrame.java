@@ -1,7 +1,7 @@
 package gamefloodit.gui;
 
 
-import gamefloodit.gmae.GameFloodit;
+import gamefloodit.game.GameFloodit;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
@@ -30,6 +30,7 @@ public class GameFrame extends javax.swing.JFrame {
 
         initComponents();
         gamePanel.setGame(game);
+        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
         gamePanel.setColors(colors);
         btn1.setBackground(colors[0]);
         btn2.setBackground(colors[1]);
@@ -181,49 +182,49 @@ public class GameFrame extends javax.swing.JFrame {
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
         // TODO add your handling code here:
-        tastGame(0);
+        putColor(0);
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
         // TODO add your handling code here:
-        tastGame(1);
+        putColor(1);
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
         // TODO add your handling code here:
-        tastGame(2);
+        putColor(2);
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
         // TODO add your handling code here:
-        tastGame(3);
+        putColor(3);
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
         // TODO add your handling code here:
-        tastGame(4);
+        putColor(4);
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
         // TODO add your handling code here:
-        tastGame(5);
+        putColor(5);
     }//GEN-LAST:event_btn6ActionPerformed
 
-    private void tastGame(int color) {
-        game.colorer(color);
+    private void putColor(int color) {
+        game.play(color);
         gamePanel.repaint();
-        scrolLabel.setText("" + game.getTour() + " / 25");
+        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
 
-        if (game.verifier()) {
+        if (game.verify()) {
             JOptionPane.showMessageDialog(null, "Winner");
-            game.nouvellePartied();
+            game.newGame();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getTour() + " / 25");
-        } else if (game.getTour() == 25) {
+            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
+        } else if (game.getRound() == game.getMaxRound()) {
             JOptionPane.showMessageDialog(null, "Game Over");
-            game.nouvellePartied();
+            game.newGame();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getTour() + " / 25");
+            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
         }
 
     }
