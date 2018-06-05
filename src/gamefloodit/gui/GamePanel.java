@@ -1,7 +1,7 @@
 package gamefloodit.gui;
 
 
-import gamefloodit.gmae.GameFloodit;
+import gamefloodit.game.GameFloodit;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -66,9 +66,9 @@ public class GamePanel extends javax.swing.JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int[][] grille = game.getGrille();
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15;j++) {
+        int[][] grille = game.getGrid();
+        for (int i = 0; i < game.getGridSize(); i++) {
+            for (int j = 0; j < game.getGridSize();j++) {
                 g.setColor(colors[grille[i][j]]);
                 g.fillRect(i*20, j*20, 20, 20);
             }

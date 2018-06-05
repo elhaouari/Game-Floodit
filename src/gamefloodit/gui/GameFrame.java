@@ -1,7 +1,7 @@
 package gamefloodit.gui;
 
 
-import gamefloodit.gmae.GameFloodit;
+import gamefloodit.game.GameFloodit;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
@@ -23,13 +23,29 @@ public class GameFrame extends javax.swing.JFrame {
      * Creates new form GameFrame
      */
     public GameFrame() {
-        game = new GameFloodit();
-        game.initGame();
         colors = new Color[]{Color.BLUE, Color.CYAN, Color.YELLOW,
             Color.RED, Color.green, Color.MAGENTA};
-
+        this.setTitle("Flood it");
+        
         initComponents();
+        initGameSize();
+    }
+
+
+    private void initGameSize() {
+        int gridSize = 10, maxRound = 10;
+        try{
+            gridSize = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter size"));
+            maxRound = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Max round"));
+        } catch (Exception e) {
+        System.exit(1);
+        }
+        game = new GameFloodit(maxRound, gridSize);
+      
+        game.initGame();
+        
         gamePanel.setGame(game);
+        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
         gamePanel.setColors(colors);
         btn1.setBackground(colors[0]);
         btn2.setBackground(colors[1]);
@@ -37,8 +53,22 @@ public class GameFrame extends javax.swing.JFrame {
         btn4.setBackground(colors[3]);
         btn5.setBackground(colors[4]);
         btn6.setBackground(colors[5]);
+        
+        int width = game.getGridSize() * 20;
+        javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
+        gamePanel.setLayout(gamePanelLayout);
+       
+        gamePanelLayout.setHorizontalGroup(
+            gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0,  width, Short.MAX_VALUE)
+        );
+        gamePanelLayout.setVerticalGroup(
+            gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0,  width, Short.MAX_VALUE)
+        );
+        this.setSize(width + 120, width + 30);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -181,49 +211,49 @@ public class GameFrame extends javax.swing.JFrame {
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
         // TODO add your handling code here:
-        tastGame(0);
+        putColor(0);
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
         // TODO add your handling code here:
-        tastGame(1);
+        putColor(1);
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
         // TODO add your handling code here:
-        tastGame(2);
+        putColor(2);
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
         // TODO add your handling code here:
-        tastGame(3);
+        putColor(3);
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
         // TODO add your handling code here:
-        tastGame(4);
+        putColor(4);
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
         // TODO add your handling code here:
-        tastGame(5);
+        putColor(5);
     }//GEN-LAST:event_btn6ActionPerformed
 
-    private void tastGame(int color) {
-        game.colorer(color);
+    private void putColor(int color) {
+        game.play(color);
         gamePanel.repaint();
-        scrolLabel.setText("" + game.getTour() + " / 25");
+        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
 
-        if (game.verifier()) {
+        if (game.verify()) {
             JOptionPane.showMessageDialog(null, "Winner");
-            game.nouvellePartied();
+            initGameSize();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getTour() + " / 25");
-        } else if (game.getTour() == 25) {
+            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
+        } else if (game.getRound() == game.getMaxRound()) {
             JOptionPane.showMessageDialog(null, "Game Over");
-            game.nouvellePartied();
+            initGameSize();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getTour() + " / 25");
+            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
         }
 
     }

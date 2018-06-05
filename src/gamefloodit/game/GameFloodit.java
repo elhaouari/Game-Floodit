@@ -1,85 +1,125 @@
-package gamefloodit.gmae;
+package gamefloodit.game;
 
 import java.util.Random;
-import java.util.Scanner;
 
 public class GameFloodit {
 
     /**
      *
      */
-    private int number = 6;
-    private int tour;
-    private final int TOUR_MAX = 25;
-    private final int TAILLE_GRILLE = 15;
-    private int grille[][];
+    private int numberOfColor = 6;
+    private int round;
+    private final int MAX_ROUND;
+    private final int GRID_SIZE;
+    private int grid[][];
 
     /**
      *
      */
+    public GameFloodit() {
+        MAX_ROUND = 35;
+        GRID_SIZE = 15;
+    }
+    
+    /**
+     * 
+     * @param maxRound
+     * @param gridSize 
+     */
+    public GameFloodit(int maxRound, int gridSize) {
+        MAX_ROUND = maxRound;
+        GRID_SIZE = gridSize;
+    }
+    
+    /**
+     * initialize the game grid with random value
+     */
     public void initGame() {
-        grille = new int[TAILLE_GRILLE][TAILLE_GRILLE];
+        grid = new int[GRID_SIZE][GRID_SIZE];
 
         Random rand = new Random();
 
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[i].length; j++) {
-                grille[i][j] = rand.nextInt(number);
+        for (int[] line : grid) {
+            for (int j = 0; j < line.length; j++) {
+                line[j] = rand.nextInt(numberOfColor);
             }
         }
     }
 
-    public void nouvellePartied() {
+    /**
+     * start new game
+     */
+    public void newGame() {
         initGame();
-        tour = 0;
+        round = 0;
     }
 
-    public void colorer(int color) {
+    /**
+     * play a round, put color in the grid
+     * @param color 
+     */
+    public void play(int color) {
         if (color < 0 || color > 6) {
             return;
         }
 
-        if (grille[0][0] != color) {
-            colorer(color, grille[0][0], 0, 0);
+        if (grid[0][0] != color) {
+            play(color, grid[0][0], 0, 0);
         }
         
-        tour++;
+        round++;
     }
 
-    private void colorer(int newColor, int oldColor, int row, int col) {
+    /**
+     * play recursive
+     * 
+     * @param newColor
+     * @param oldColor
+     * @param row
+     * @param col 
+     */
+    private void play(int newColor, int oldColor, int row, int col) {
         // make sure row and col are inside the image
-        if (row < 0 || col < 0 || row >= TAILLE_GRILLE || col >= TAILLE_GRILLE) {
+        if (row < 0 || col < 0 || row >= GRID_SIZE || col >= GRID_SIZE) {
             return;
         }
         
         // make sure this pixel is the right color to fill
-        if ( grille[row][col] != oldColor) {
+        if ( grid[row][col] != oldColor) {
             return;
         }
         
         // fill pixel with target color and mark it as visited
-        grille[row][col] = newColor;
+        grid[row][col] = newColor;
         
         // recursively fill surrounding pixels
         // (this is equivelant to depth-first search)
-        colorer(newColor, oldColor, row - 1, col);
-        colorer(newColor, oldColor, row + 1, col);
-        colorer(newColor, oldColor, row, col - 1);
-        colorer(newColor, oldColor, row, col + 1);
+        play(newColor, oldColor, row - 1, col);
+        play(newColor, oldColor, row + 1, col);
+        play(newColor, oldColor, row, col - 1);
+        play(newColor, oldColor, row, col + 1);
     }
 
+    /**
+     * play an order optimal
+     */
     public void orderOptimal() {
         int index_Max_Occurence;
-        while (!verifier()) {
+        while (!verify()) {
             index_Max_Occurence = calculeOccurenceMax();
-            colorer(index_Max_Occurence);
+            play(index_Max_Occurence);
         }
     }
 
-    public boolean verifier() {
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[i].length; j++) {
-                if (grille[i][j] != grille[0][0]) {
+    /**
+     * check if the play win the round
+     * 
+     * @return 
+     */
+    public boolean verify() {
+        for (int[] line : grid) {
+            for (int j = 0; j < line.length; j++) {
+                if (line[j] != grid[0][0]) {
                     return false;
                 }
             }
@@ -88,77 +128,44 @@ public class GameFloodit {
         return true;
     }
 
-    public void tracerGrile() {
-        for (int i = 0; i < grille.length; i++) {
-            System.out.print("------");
-        }
-        System.out.println();
-        for (int i = 0; i < grille.length; i++) {
-            for (int j = 0; j < grille[i].length; j++) {
-                System.out.print("|  " + grille[i][j] + "  ");
-                if ( j == grille.length - 1) {
-                    System.out.print("|");
-                }
-            }
-            System.out.println();
-            System.out.print("|");
-            for (int j = 0; j < grille.length; j++) {
-                System.out.print("-----");
-                if ( j != grille.length - 1) {
-                    System.out.print("+");
-                }
-            }
-            System.out.print("|");
-            System.out.println();
-        }
-    }
 
-    public void jeu() {
-        initGame();
-        tracerGrile();
-        while (tour < TOUR_MAX) {
-            System.out.print("Entre un nombre " + tour + ": ");
-            Scanner s = new Scanner(System.in);
-            colorer(s.nextInt());
-            tracerGrile();
-        }
-    }
-
+    /**
+     * check the optimal play
+     * @return 
+     */
     private int calculeOccurenceMax() {
         return 0;
     }
-
-    public static void main(String[] args) {
-        GameFloodit jeu = new GameFloodit();
-
-        jeu.jeu();
-
-    }
-
     
-    public int getNumber() {
-        return number;
+    public int getNumberOfColor() {
+        return numberOfColor;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public int getMaxRound() {
+        return this.MAX_ROUND;
     }
-
-    public int getTour() {
-        return tour;
-    }
-
-    public void setTour(int tour) {
-        this.tour = tour;
-    }
-
-    public int[][] getGrille() {
-        return grille;
-    }
-
-    public void setGrille(int[][] grille) {
-        this.grille = grille;
-    }
-
     
+    public void setNumberOfColor(int numberOfColor) {
+        this.numberOfColor = numberOfColor;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public int getGridSize() {
+        return GRID_SIZE;
+    }
+    
+    public int[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
+    }
 }
