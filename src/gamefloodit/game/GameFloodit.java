@@ -14,7 +14,7 @@ public class GameFloodit {
     private int grid[][];
 
     /**
-     *
+     * initialize the game grid with random value
      */
     public GameFloodit() {
         MAX_ROUND = 35;
