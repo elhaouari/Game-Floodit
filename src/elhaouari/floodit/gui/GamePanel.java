@@ -1,7 +1,7 @@
-package gamefloodit.gui;
+package elhaouari.floodit.gui;
 
 
-import gamefloodit.game.GameFloodit;
+import elhaouari.floodit.game.GameFloodit;
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -66,11 +66,12 @@ public class GamePanel extends javax.swing.JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int[][] grille = game.getGrid();
-        for (int i = 0; i < game.getGridSize(); i++) {
-            for (int j = 0; j < game.getGridSize();j++) {
+        int[][] grille = game.getBoard().getGrid();
+        for (int i = 0; i < game.getBoard().GRID_SIZE; i++) {
+            for (int j = 0; j < game.getBoard().GRID_SIZE; j++) {
                 g.setColor(colors[grille[i][j]]);
-                g.fillRect(i*20, j*20, 20, 20);
+                g.fillRect(i * Config.SQUARE_SIZE, j * Config.SQUARE_SIZE,
+                        Config.SQUARE_SIZE, Config.SQUARE_SIZE);
             }
         }
     }

@@ -1,7 +1,7 @@
-package gamefloodit.gui;
+package elhaouari.floodit.gui;
 
 
-import gamefloodit.game.GameFloodit;
+import elhaouari.floodit.game.GameFloodit;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 
@@ -17,14 +17,12 @@ import javax.swing.JOptionPane;
 public class GameFrame extends javax.swing.JFrame {
 
     GameFloodit game;
-    Color[] colors;
+    Color[] colors = Config.colors;
 
     /**
      * Creates new form GameFrame
      */
     public GameFrame() {
-        colors = new Color[]{Color.BLUE, Color.CYAN, Color.YELLOW,
-            Color.RED, Color.green, Color.MAGENTA};
         this.setTitle("Flood it");
         
         initComponents();
@@ -35,17 +33,20 @@ public class GameFrame extends javax.swing.JFrame {
     private void initGameSize() {
         int gridSize = 10, maxRound = 10;
         try{
-            gridSize = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter size"));
-            maxRound = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Max round"));
+            gridSize = Integer.parseInt(String.valueOf(
+                    JOptionPane.showInputDialog(null, "Enter size", "", JOptionPane.OK_CANCEL_OPTION, null, null, "20")));
+            maxRound = Integer.parseInt(String.valueOf(
+                    JOptionPane.showInputDialog(null, "Enter Max round", "", JOptionPane.OK_CANCEL_OPTION, null, null, "30")));
         } catch (Exception e) {
         System.exit(1);
         }
+
         game = new GameFloodit(maxRound, gridSize);
       
-        game.initGame();
+        game.initBoardWithRandomColor();
         
         gamePanel.setGame(game);
-        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
+        scrolLabel.setText("" + game.getBoard().getRound()+ " / " + game.getBoard().MAX_ROUND);
         gamePanel.setColors(colors);
         btn1.setBackground(colors[0]);
         btn2.setBackground(colors[1]);
@@ -54,7 +55,7 @@ public class GameFrame extends javax.swing.JFrame {
         btn5.setBackground(colors[4]);
         btn6.setBackground(colors[5]);
         
-        int width = game.getGridSize() * 20;
+        int width = game.getBoard().GRID_SIZE * Config.SQUARE_SIZE;
         javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
         gamePanel.setLayout(gamePanelLayout);
        
@@ -66,7 +67,7 @@ public class GameFrame extends javax.swing.JFrame {
             gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0,  width, Short.MAX_VALUE)
         );
-        this.setSize(width + 120, width + 30);
+        this.setSize(width + 130, width + 39);
     }
     
     /**
@@ -240,20 +241,20 @@ public class GameFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btn6ActionPerformed
 
     private void putColor(int color) {
-        game.play(color);
+        game.updateBoardByNewColor(color);
         gamePanel.repaint();
-        scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
+        scrolLabel.setText("" + game.getBoard().getRound()+ " / " + game.getBoard().MAX_ROUND);
 
         if (game.verify()) {
             JOptionPane.showMessageDialog(null, "Winner");
             initGameSize();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
-        } else if (game.getRound() == game.getMaxRound()) {
+            scrolLabel.setText("" + game.getBoard().getRound()+ " / " + game.getBoard().MAX_ROUND);
+        } else if (game.getBoard().getRound() == game.getBoard().MAX_ROUND) {
             JOptionPane.showMessageDialog(null, "Game Over");
             initGameSize();
             gamePanel.repaint();
-            scrolLabel.setText("" + game.getRound()+ " / " + game.getMaxRound());
+            scrolLabel.setText("" + game.getBoard().getRound()+ " / " + game.getBoard().MAX_ROUND);
         }
 
     }
