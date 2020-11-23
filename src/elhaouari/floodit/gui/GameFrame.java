@@ -31,12 +31,12 @@ public class GameFrame extends javax.swing.JFrame {
 
 
     private void initGameSize() {
-        int gridSize = 10, maxRound = 10;
+        int gridSize = 20, maxRound = 35;
         try{
             gridSize = Integer.parseInt(String.valueOf(
-                    JOptionPane.showInputDialog(null, "Enter size", "", JOptionPane.OK_CANCEL_OPTION, null, null, "20")));
+                    JOptionPane.showInputDialog(null, "Enter size of board", "Size of Board", JOptionPane.OK_CANCEL_OPTION, null, null, gridSize)));
             maxRound = Integer.parseInt(String.valueOf(
-                    JOptionPane.showInputDialog(null, "Enter Max round", "", JOptionPane.OK_CANCEL_OPTION, null, null, "30")));
+                    JOptionPane.showInputDialog(null, "Enter Max round", "Max round", JOptionPane.OK_CANCEL_OPTION, null, null, maxRound)));
         } catch (Exception e) {
         System.exit(1);
         }
@@ -212,40 +212,40 @@ public class GameFrame extends javax.swing.JFrame {
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
         // TODO add your handling code here:
-        putColor(0);
+        clickedOnColor(0);
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
         // TODO add your handling code here:
-        putColor(1);
+        clickedOnColor(1);
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
         // TODO add your handling code here:
-        putColor(2);
+        clickedOnColor(2);
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
         // TODO add your handling code here:
-        putColor(3);
+        clickedOnColor(3);
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
         // TODO add your handling code here:
-        putColor(4);
+        clickedOnColor(4);
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
         // TODO add your handling code here:
-        putColor(5);
+        clickedOnColor(5);
     }//GEN-LAST:event_btn6ActionPerformed
 
-    private void putColor(int color) {
+    private void clickedOnColor(int color) {
         game.updateBoardByNewColor(color);
         gamePanel.repaint();
         scrolLabel.setText("" + game.getBoard().getRound()+ " / " + game.getBoard().MAX_ROUND);
 
-        if (game.verify()) {
+        if (game.isWonTheGame()) {
             JOptionPane.showMessageDialog(null, "Winner");
             initGameSize();
             gamePanel.repaint();

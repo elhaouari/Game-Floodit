@@ -73,13 +73,13 @@ public class GameFloodit {
 
     public void orderOptimal() {
         int index_Max_Occurence;
-        while (!verify()) {
+        while (!isWonTheGame()) {
             index_Max_Occurence = calculeOccurenceMax();
             updateBoardByNewColor(index_Max_Occurence);
         }
     }
 
-    public boolean verify() {
+    public boolean isWonTheGame() {
         for (int[] line : board.getGrid()) {
             for (int i : line) {
                 if (i != board.getGrid()[0][0]) {
